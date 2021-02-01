@@ -12,10 +12,12 @@ beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
   // Use one of those accounts to deploy
   // the contract
+  // The first argument of Contract constructor is the ABI (interface)
+  // And we want to parse it to regular JS Object.
   inbox = await new web3.eth.Contract(JSON.parse(interface))
     .deploy({
       data: bytecode,
-      arguments: ["Hi there!"],
+      arguments: ["Hi there!"], // The initial message
     })
     .send({ from: accounts[0], gas: "1000000" });
 });
