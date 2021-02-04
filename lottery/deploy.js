@@ -1,6 +1,11 @@
 const HDWalletProvider = require("truffle-hdwallet-provider");
 const Web3 = require("web3");
-const { interface, bytecode } = require("./compile");
+// The bytecode is what will actually go onto the blockchain to make the smart contract work.
+// The interface will be the Javascript layer that acts like a human-friendly map of the bytecode. interface = ABI
+const { abi, evm } = require("./compile");
+
+const interface = abi;
+const bytecode = evm.bytecode.object;
 
 const provider = new HDWalletProvider(
   "girl pluck love flag unveil wave pool very expand wool reward vendor",
@@ -12,7 +17,7 @@ const web3 = new Web3(provider);
 const deploy = async () => {
   const accounts = await web3.eth.getAccounts();
   console.log("Attempting to deploy from account", accounts[0]);
-  const result = await new web3.eth.Contract(JSON.parse(interface))
+  const result = await new web3.eth.Contract(interface)
     .deploy({
       data: bytecode,
     })

@@ -56,5 +56,3 @@ contract Lottery {
       //  return players[index];
     //}
 }
-
-
