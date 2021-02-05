@@ -77,6 +77,53 @@ describe("Lottery Contract", () => {
   });
 
   it("requires a minimum amount of ether to enter", async () => {
-    assert.ok(lottery._address);
+    try {
+      await lottery.methods.enter().send({
+        from: accounts[0],
+        // its 200 wei because we dont convert it to etr
+        value: 200,
+      });
+      assert(false);
+    } catch (err) {
+      assert(err);
+    }
+  });
+
+  it("only manager can call pickWinner", async () => {
+    try {
+      await lottery.methods.pickWinner().send({
+        from: accounts[1], // this is not the manager of the lottery
+      });
+      assert(false); // if we get to this line of code, automaticly fail the test.
+    } catch (err) {
+      assert(err);
+    }
+  });
+  // end to end test
+  it("sends money to the winner and resets the players array", async () => {
+    await lottery.methods.enter().send({
+      from: accounts[0],
+      value: web3.utils.toWei("2", "ether"),
+    });
+
+    // getBalance() takes address and returns the amout of ether assings to this address (working also for contracts)
+    const initialBalance = await web3.eth.getBalance(accounts[0]);
+    await lottery.methods.pickWinner().send({ from: accounts[0] });
+    const finalBalance = await web3.eth.getBalance(accounts[0]);
+    // the difference between initialBalance to finalBalance will be less then 2 ether
+    // because of the gas
+    const defference = finalBalance - initialBalance;
+    assert(defference > web3.utils.toWei("1.8", "ether"));
+
+    // here we want to be sure that the amount of the contract = 0
+    // After the money is sent to the winner's account
+    const lotteryBalance = await web3.eth.getBalance(lottery._address);
+    assert.equal(lotteryBalance, 0);
+
+    // Here we check that the array is emptied after the lottery
+    const players = await lottery.methods.getPlayers().call({
+      from: accounts[0],
+    });
+    assert.equal(players.length, 0);
   });
 });

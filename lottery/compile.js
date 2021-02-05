@@ -5,7 +5,7 @@ const solc = require("solc"); // solc is a Solidity compiler
 const lotteryPath = path.resolve(__dirname, "contracts", "Lottery.sol");
 const source = fs.readFileSync(lotteryPath, "utf8");
 
-var input = {
+const input = {
   language: "Solidity",
   sources: {
     "Lottery.sol": {
