@@ -24,6 +24,13 @@ const input = {
   },
 };
 
-module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts[
+const {
+  abi: interface,
+  evm: {
+    bytecode: { object },
+  },
+} = JSON.parse(solc.compile(JSON.stringify(input))).contracts[
   "Lottery.sol"
 ].Lottery;
+
+module.exports = { interface, object };

@@ -1,16 +1,19 @@
+// SPDX-License-Identifier: Just want to ignore the warnnig
 pragma solidity ^0.7.4;
 
 contract Lottery {
     address public manager;
+    address public lastWinner;
     // Must be payable because the method "transfer" or "send" is used on the array elements.
     address payable[] public players;
+    string store = "abcdef";
     
     constructor() { 
         // msg is a global variable that contains: data, gas, sender, value.
         manager = msg.sender;
     }
     
-    function getPlayerCount() public view returns(uint count) {
+    function getPlayerCount() public view returns(uint) {
         return players.length;
     }
     
@@ -20,6 +23,10 @@ contract Lottery {
         // need to add: require(msg.value = ticketPrice);
         require(msg.value > .01 ether);
         players.push(msg.sender);
+    }
+    
+    function getStore() public view returns (string memory) {
+        return store;
     }
     
     // view because this function will not tempt to change any of the data stored in the contract.
@@ -36,6 +43,7 @@ contract Lottery {
         uint index = random() % players.length;
         // Transfer the amount to the winner.
         players[index].transfer(address(this).balance);
+        lastWinner = players[index];
         // We want to create a dynamic array with initial size of 0.
         // So that the lottery will be held over and over.
         players = new address payable[](0);
