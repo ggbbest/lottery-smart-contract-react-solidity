@@ -1,8 +1,11 @@
 # ethereum-lottery-smart-contract
 Ethereum / Solidity Smart Contract BoilerPlate
 
-## General Usage
-You can use this smart contract boilerplate to write and deploy smart contracts to Ethereum networks.
+## App Description
+🔹 The contract allows players to buy tickets and sign up for a lottery 💰.
+The addresses of the participants' wallets will appear in the list on the screen and clicking on any address will take the user to the account information on the etherscan website.
+
+🔹 If the Contract manager is logged in from the current account, he will be able to start the lottery by pressing the button "Pick a Winner" button. If the manager will click on the button, one participant from the list will win the amount of #ethereum and a transfer will be made to him from the smart account to the address of his wallet.
 
 ### Steps:
 Sign up for [https://metamask.io/](https://metamask.io/) to get an Ethereum wallet. Make sure to save your 12 word wallet mnemonic somewhere safe.
