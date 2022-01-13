@@ -12,12 +12,12 @@ const NEW_STRING = "Bye";
 beforeEach(async () => {
   // Get a list of all accounts
   // ganache CLI automaticly creates a set of accounts for us
-  accounts = await web3.eth.getAccounts();
+  accounts = await caver.klay.getAccounts();
   // Use one of those accounts to deploy the contract
   // The first argument of Contract constructor is the ABI (interface)
   // And we want to parse it to regular JS Object.
   // The solidity compilier makes it JSON representation.
-  inbox = await new web3.eth.Contract(JSON.parse(interface))
+  inbox = await new caver.klay.Contract(JSON.parse(interface))
     // Creating the corntact object
     .deploy({
       data: bytecode,

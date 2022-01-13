@@ -5,6 +5,8 @@ import Form from "./Form";
 import WinnerPick from "./WinnerPick";
 import Content from "./Content";
 import Loader from "./Loader";
+// const Caver = require('caver-js')
+// const caver = new Caver(process.env.CEIK_RPC)
 
 const App = () => {
   const [managerAddress, setManagerAddress] = useState("");
@@ -16,26 +18,20 @@ const App = () => {
   const [lastWinner, setLastWinner] = useState("");
   const [players, setPlayers] = useState([]);
 
+  const contract_address = "0x978171FB2d5aC77223982F4095FAAdf2C4c000E6";
+  const contract_abi = [{"inputs": [],"stateMutability": "nonpayable","type": "constructor"},{"inputs": [],"name": "enter","outputs": [],"stateMutability": "payable","type": "function"},{"inputs": [],"name": "getLastlastWinner","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "getPlayerCount","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "getPlayers","outputs": [{"internalType": "address payable[]","name": "","type": "address[]"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "lastWinner","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "manager","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "pickWinner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "players","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"}];
+  const lottery = new caver.klay.Contract(contract_abi, contract_address)
 
   const ethereum = window.ethereum;
 
   useEffect(() => {
     const func = async () => {
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
+
+      const accounts = await ethereum.request({method: "eth_requestAccounts",});
       const managerAddress = await lottery.methods.manager().call();
-      const contractAccountBalance = await web3.eth.getBalance(
-        lottery.options.address
-      );
-
-      const contractAccountBalanceInEther = web3.utils.fromWei(
-        contractAccountBalance,
-        "ether"
-      );
-
+      const contractAccountBalance = await caver.klay.getBalance(lottery.options.address);
+      const contractAccountBalanceInEther = caver.utils.convertToPeb(contractAccountBalance,"KLAY");
       const contractAddress = await lottery.options.address;
-
       const numOfPlayers = await lottery.methods.getPlayerCount().call();
       const lastWinner = await lottery.methods.lastWinner().call();
       const players = await lottery.methods.getPlayers().call();
@@ -56,7 +52,8 @@ const App = () => {
   useEffect(() => {
     const isAccountsChanged = async () => {
       ethereum.on("accountsChanged", async () => {
-        const accounts = await web3.eth.getAccounts();
+      // klaytn.on("accountsChanged", async () => {
+        const accounts = await caver.klay.getAccounts();
 
         setUserAddress(accounts[0]);
       });
@@ -70,7 +67,7 @@ const App = () => {
     try{
       await lottery.methods.enter().send({
         from: userAddress,
-        value: web3.utils.toWei(term, "ether"),
+        value: caver.utils.convertToPeb(term,"KLAY")
       });
       setNumOfPlayers(parseInt(numOfPlayers)+1)
       const players = await lottery.methods.getPlayers().call();
@@ -99,7 +96,7 @@ const App = () => {
   };
 
   const renderContent = () => {
-    console.log(userAddress)
+    // console.log(userAddress)
     if (userAddress) {
       return (
         <div className="ui grid">

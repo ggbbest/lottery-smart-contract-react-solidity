@@ -13,9 +13,9 @@ const provider = new HDWalletProvider(
 const web3 = new Web3(provider);
 // getAccounts() becouse the mnemonic can genarate many accounts.
 const deploy = async () => {
-  const accounts = await web3.eth.getAccounts();
+  const accounts = await caver.klay.getAccounts();
   console.log("Attempting to deploy from account", accounts[0]);
-  const result = await new web3.eth.Contract(interface)
+  const result = await new caver.klay.Contract(interface)
     .deploy({ data: "0x" + bytecode }) // add 0x bytecode
     .send({ from: accounts[0] }); // remove 'gas'
 

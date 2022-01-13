@@ -17,12 +17,12 @@ let accounts;
 beforeEach(async () => {
   // Get a list of all accounts
   // ganache CLI automaticly creates a set of accounts for us
-  accounts = await web3.eth.getAccounts();
+  accounts = await caver.klay.getAccounts();
   // Use one of those accounts to deploy the contract
   // The first argument of Contract constructor is the ABI (interface)
   // And we want to parse it to regular JS Object.
   // The solidity compilier makes it JSON representation.
-  lottery = await new web3.eth.Contract(interface)
+  lottery = await new caver.klay.Contract(interface)
     // Creating the corntact object
     .deploy({
       data: bytecode,
@@ -40,7 +40,7 @@ describe("Lottery Contract", () => {
   it("allows one account to enter", async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei("0.02", "klay"),
+      value: caver.utils.convertToPeb("0.02", "KLAY"),
     });
     const players = await lottery.methods.getPlayers().call({
       from: accounts[0],
@@ -53,17 +53,17 @@ describe("Lottery Contract", () => {
   it("allows multipy accounts to enter", async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei("0.02", "klay"),
+      value: caver.utils.convertToPeb("0.02", "KLAY"),
     });
 
     await lottery.methods.enter().send({
       from: accounts[1],
-      value: web3.utils.toWei("0.02", "klay"),
+      value: caver.utils.convertToPeb("0.02", "KLAY"),
     });
 
     await lottery.methods.enter().send({
       from: accounts[2],
-      value: web3.utils.toWei("0.02", "klay"),
+      value: caver.utils.convertToPeb("0.02", "KLAY"),
     });
 
     const players = await lottery.methods.getPlayers().call({
@@ -103,21 +103,21 @@ describe("Lottery Contract", () => {
   it("sends money to the winner and resets the players array", async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei("2", "klay"),
+      value: caver.utils.convertToPeb("2", "KLAY"),
     });
 
     // getBalance() takes address and returns the amout of klay assings to this address (working also for contracts)
-    const initialBalance = await web3.eth.getBalance(accounts[0]);
+    const initialBalance = await caver.klay.getBalance(accounts[0]);
     await lottery.methods.pickWinner().send({ from: accounts[0] });
-    const finalBalance = await web3.eth.getBalance(accounts[0]);
+    const finalBalance = await caver.klay.getBalance(accounts[0]);
     // the difference between initialBalance to finalBalance will be less then 2 klay
     // because of the gas
     const defference = finalBalance - initialBalance;
-    assert(defference > web3.utils.toWei("1.8", "klay"));
+    assert(defference > caver.utils.convertToPeb("1.8", "KLAY"));
 
     // here we want to be sure that the amount of the contract = 0
     // After the money is sent to the winner's account
-    const lotteryBalance = await web3.eth.getBalance(lottery._address);
+    const lotteryBalance = await caver.klay.getBalance(lottery._address);
     assert.equal(lotteryBalance, 0);
 
     // Here we check that the array is emptied after the lottery
