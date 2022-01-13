@@ -1,3 +1,11 @@
+/*
+Metadata of "lottery" was published successfully.
+Lottery.sol : ipfs://QmXCsPkM29BVENKhUSMQx2ZEVMBFejzqLWyeGoC8vUuWB7
+metadata.json : ipfs://Qmf48Fp2tyvWHncPAi8SRyeniQDsxNsYsWvQPirHm6voNC
+0x978171FB2d5aC77223982F4095FAAdf2C4c000E6
+
+require(msg.value > .01 klay); 클레이가 이더로 배포됨
+*/
 // SPDX-License-Identifier: Just want to ignore the warnnig
 pragma solidity ^0.7.4;
 
@@ -6,7 +14,7 @@ contract Lottery {
     address public lastWinner;
     // Must be payable because the method "transfer" or "send" is used on the array elements.
     address payable[] public players;
-    string store = "abcdef";
+    string store = "ceik";
     
     constructor() { 
         // msg is a global variable that contains: data, gas, sender, value.
@@ -21,7 +29,7 @@ contract Lottery {
         // require is a global function.
         // if require is passed in a falsie value then the function will automatically exit.
         // need to add: require(msg.value = ticketPrice);
-        require(msg.value > .01 ether);
+        require(msg.value > .01 klay);
         players.push(msg.sender);
     }
     

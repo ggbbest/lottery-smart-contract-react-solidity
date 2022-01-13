@@ -31,7 +31,7 @@ const App = () => {
 
       const contractAccountBalanceInEther = web3.utils.fromWei(
         contractAccountBalance,
-        "ether"
+        "klay"
       );
 
       const contractAddress = await lottery.options.address;
@@ -70,7 +70,7 @@ const App = () => {
     try{
       await lottery.methods.enter().send({
         from: userAddress,
-        value: web3.utils.toWei(term, "ether"),
+        value: web3.utils.toWei(term, "klay"),
       });
       setNumOfPlayers(parseInt(numOfPlayers)+1)
       const players = await lottery.methods.getPlayers().call();

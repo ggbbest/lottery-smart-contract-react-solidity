@@ -40,7 +40,7 @@ describe("Lottery Contract", () => {
   it("allows one account to enter", async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei("0.02", "ether"),
+      value: web3.utils.toWei("0.02", "klay"),
     });
     const players = await lottery.methods.getPlayers().call({
       from: accounts[0],
@@ -53,17 +53,17 @@ describe("Lottery Contract", () => {
   it("allows multipy accounts to enter", async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei("0.02", "ether"),
+      value: web3.utils.toWei("0.02", "klay"),
     });
 
     await lottery.methods.enter().send({
       from: accounts[1],
-      value: web3.utils.toWei("0.02", "ether"),
+      value: web3.utils.toWei("0.02", "klay"),
     });
 
     await lottery.methods.enter().send({
       from: accounts[2],
-      value: web3.utils.toWei("0.02", "ether"),
+      value: web3.utils.toWei("0.02", "klay"),
     });
 
     const players = await lottery.methods.getPlayers().call({
@@ -76,7 +76,7 @@ describe("Lottery Contract", () => {
     assert.equal(3, players.length);
   });
 
-  it("requires a minimum amount of ether to enter", async () => {
+  it("requires a minimum amount of klay to enter", async () => {
     try {
       await lottery.methods.enter().send({
         from: accounts[0],
@@ -103,17 +103,17 @@ describe("Lottery Contract", () => {
   it("sends money to the winner and resets the players array", async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei("2", "ether"),
+      value: web3.utils.toWei("2", "klay"),
     });
 
-    // getBalance() takes address and returns the amout of ether assings to this address (working also for contracts)
+    // getBalance() takes address and returns the amout of klay assings to this address (working also for contracts)
     const initialBalance = await web3.eth.getBalance(accounts[0]);
     await lottery.methods.pickWinner().send({ from: accounts[0] });
     const finalBalance = await web3.eth.getBalance(accounts[0]);
-    // the difference between initialBalance to finalBalance will be less then 2 ether
+    // the difference between initialBalance to finalBalance will be less then 2 klay
     // because of the gas
     const defference = finalBalance - initialBalance;
-    assert(defference > web3.utils.toWei("1.8", "ether"));
+    assert(defference > web3.utils.toWei("1.8", "klay"));
 
     // here we want to be sure that the amount of the contract = 0
     // After the money is sent to the winner's account
