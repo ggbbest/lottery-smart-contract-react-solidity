@@ -24,13 +24,13 @@ const Form = (props) => {
   return (
     <div>
       <form className="ui fuild form" onSubmit={onFormSubmit}>
-        <h4>Want to try your luck?</h4>
+        <h4>최소 0.1 klay 이상가능</h4>
         <div className="field">
-          <label>Amount of klay to enter: </label>
+          <label>구매할 klay입력: </label>
           <input className="ui input" value={term} onChange={onInputChange} />
           {!isCorrect && <div class="ui pointing red basic label">1 Ticket = 0.1 klay</div>}
         </div>
-        <button className="ui primary button">Enter</button>
+        <button className="ui primary button">구매</button>
       </form>
     </div>
   );

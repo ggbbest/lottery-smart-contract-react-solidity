@@ -14,10 +14,10 @@ const Content = (props) => {
 
   return (
     <div>
-      <h1 className="ui header">💸 Lottery Contract 💸</h1>
+      <h1 className="ui header">Klay Lotto</h1>
       <h2 className="line">{`
-                          In this account you can buy lottery tickets at a cost of 0.1 klay per ticket. 
-                          Then, the lottery manager will randomly choose a winner and the money will go into his account 💰.`}</h2>
+                          입력 최소금액은 0.1 klay. 
+                          적립된 klay는 무작위로 선택된 당첨자의 계좌로 들어갑니다.`}</h2>
       <div className="paragraph">
         <div className="line">
           {`The contract address is: `}
